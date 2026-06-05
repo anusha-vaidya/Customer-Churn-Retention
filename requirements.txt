@@ -1,1 +1,23 @@
+# Requirements:
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+
+
+# Installations:
+git clone https://github.com/anusha-vaidya/Customer-Churn-Retention.git
+cd Customer-Churn-Retention
+
+python -m venv venv
+source venv/bin/activate      # Mac/Linux
+venv\Scripts\activate         # Windows
+
+pip install -r requirements.txt
+
+
+# Steps to Execute:
+python notebooks/01_data_exploration.py
+python notebooks/02_feature_engineering.py
+python notebooks/03_modeling.py
+python notebooks/04_feature_importance.py
 
