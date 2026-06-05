@@ -46,7 +46,7 @@ plt.xticks(rotation=45)
 plt.show()
 
 # 8. Save cleaned version for modeling
-df.to_csv("../data/processed/cleaned_churn.csv", index=False)
+df.to_csv("data/processed/cleaned_churn.csv", index=False)
 
 print("\nCleaned dataset saved to data/processed/cleaned_churn.csv")
 

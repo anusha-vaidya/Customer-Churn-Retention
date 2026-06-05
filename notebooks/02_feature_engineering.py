@@ -9,19 +9,21 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 # 1. Load cleaned dataset
-df = pd.read_csv("../data/processed/cleaned_churn.csv")
+df = pd.read_csv("data/processed/cleaned_churn.csv")
 
 print("Initial shape:", df.shape)
 
-# 2. Encode binary Yes/No columns
-binary_cols = [
-    'Partner', 'Dependents', 'PhoneService', 'PaperlessBilling', 'Churn'
-]
+# 2. Drop non‑predictive columns
+if "customerID" in df.columns:
+    df = df.drop(columns=["customerID"])
+
+# 3. Encode binary Yes/No columns
+binary_cols = ['Partner', 'Dependents', 'PhoneService', 'PaperlessBilling', 'Churn']
 
 for col in binary_cols:
     df[col] = df[col].map({'Yes': 1, 'No': 0})
 
-# 3. Encode categorical columns using LabelEncoder
+# 4. Encode categorical columns using LabelEncoder
 cat_cols = [
     'gender', 'MultipleLines', 'InternetService', 'OnlineSecurity',
     'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV',
@@ -32,13 +34,13 @@ le = LabelEncoder()
 for col in cat_cols:
     df[col] = le.fit_transform(df[col])
 
-# 4. Scale numerical columns
+# 5. Scale numerical columns
 num_cols = ['tenure', 'MonthlyCharges', 'TotalCharges']
 
 scaler = StandardScaler()
 df[num_cols] = scaler.fit_transform(df[num_cols])
 
-# 5. Split into X and y
+# 6. Split into X and y
 X = df.drop('Churn', axis=1)
 y = df['Churn']
 
@@ -49,11 +51,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 print("Train shape:", X_train.shape)
 print("Test shape:", X_test.shape)
 
-# 6. Save processed datasets
-X_train.to_csv("../data/processed/X_train.csv", index=False)
-X_test.to_csv("../data/processed/X_test.csv", index=False)
-y_train.to_csv("../data/processed/y_train.csv", index=False)
-y_test.to_csv("../data/processed/y_test.csv", index=False)
+# 7. Save processed datasets
+X_train.to_csv("data/processed/X_train.csv", index=False)
+X_test.to_csv("data/processed/X_test.csv", index=False)
+y_train.to_csv("data/processed/y_train.csv", index=False)
+y_test.to_csv("data/processed/y_test.csv", index=False)
 
 print("Feature engineering complete. Files saved in data/processed/")
-

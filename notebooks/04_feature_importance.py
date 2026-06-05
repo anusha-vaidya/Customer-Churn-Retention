@@ -10,8 +10,8 @@ import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier
 
 # 1. Load processed data
-X_train = pd.read_csv("../data/processed/X_train.csv")
-y_train = pd.read_csv("../data/processed/y_train.csv").values.ravel()
+X_train = pd.read_csv("data/processed/X_train.csv")
+y_train = pd.read_csv("data/processed/y_train.csv").values.ravel()
 
 # 2. Train Random Forest (same config as before)
 rf_model = RandomForestClassifier(
@@ -42,6 +42,6 @@ plt.tight_layout()
 plt.show()
 
 # 5. Save feature importance for dashboard
-feat_imp.to_csv("../data/processed/feature_importance.csv", index=False)
+feat_imp.to_csv("data/processed/feature_importance.csv", index=False)
 
 print("\nFeature importance saved to data/processed/feature_importance.csv")

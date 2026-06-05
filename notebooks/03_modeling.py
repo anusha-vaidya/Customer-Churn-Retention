@@ -9,10 +9,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 
 # 1. Load processed data
-X_train = pd.read_csv("../data/processed/X_train.csv")
-X_test = pd.read_csv("../data/processed/X_test.csv")
-y_train = pd.read_csv("../data/processed/y_train.csv").values.ravel()
-y_test = pd.read_csv("../data/processed/y_test.csv").values.ravel()
+X_train = pd.read_csv("data/processed/X_train.csv")
+X_test = pd.read_csv("data/processed/X_test.csv")
+y_train = pd.read_csv("data/processed/y_train.csv").values.ravel()
+y_test = pd.read_csv("data/processed/y_test.csv").values.ravel()
 
 # ============================================
 # Logistic Regression (Baseline Model)
@@ -60,7 +60,7 @@ pred_df = pd.DataFrame({
     "RF_Pred": rf_preds
 })
 
-pred_df.to_csv("../data/processed/model_predictions.csv", index=False)
+pred_df.to_csv("data/processed/model_predictions.csv", index=False)
 
 print("\nModel predictions saved to data/processed/model_predictions.csv")
 
