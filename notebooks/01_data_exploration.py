@@ -12,7 +12,7 @@ import seaborn as sns
 pd.set_option('display.max_columns', None)
 
 # 2. Load dataset
-df = pd.read_csv("../data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+df = pd.read_csv("data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
 # Preview
 df.head()
