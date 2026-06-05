@@ -1,66 +1,25 @@
 # ============================================
-# 03_model_training.py
+# 03_modeling.py
 # Customer Churn & Retention Dashboard Project
 # ============================================
 
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
+from src.model_training import train_logistic_model
 
-# 1. Load processed data
+# 1. Load processed datasets
 X_train = pd.read_csv("data/processed/X_train.csv")
 X_test = pd.read_csv("data/processed/X_test.csv")
-y_train = pd.read_csv("data/processed/y_train.csv").values.ravel()
-y_test = pd.read_csv("data/processed/y_test.csv").values.ravel()
+y_train = pd.read_csv("data/processed/y_train.csv").squeeze()
+y_test = pd.read_csv("data/processed/y_test.csv").squeeze()
 
-# ============================================
-# Logistic Regression (Baseline Model)
-# ============================================
+# 2. Train model + get predictions
+model, y_pred, y_prob = train_logistic_model(X_train, y_train, X_test)
 
-log_model = LogisticRegression(max_iter=1000)
-log_model.fit(X_train, y_train)
-
-log_preds = log_model.predict(X_test)
-
-print("\n===== Logistic Regression Results =====")
-print("Accuracy:", accuracy_score(y_test, log_preds))
-print("Precision:", precision_score(y_test, log_preds))
-print("Recall:", recall_score(y_test, log_preds))
-print("F1 Score:", f1_score(y_test, log_preds))
-print("\nClassification Report:\n", classification_report(y_test, log_preds))
-
-# ============================================
-# Random Forest (Stronger Model)
-# ============================================
-
-rf_model = RandomForestClassifier(
-    n_estimators=300,
-    max_depth=10,
-    random_state=42
-)
-
-rf_model.fit(X_train, y_train)
-rf_preds = rf_model.predict(X_test)
-
-print("\n===== Random Forest Results =====")
-print("Accuracy:", accuracy_score(y_test, rf_preds))
-print("Precision:", precision_score(y_test, rf_preds))
-print("Recall:", recall_score(y_test, rf_preds))
-print("F1 Score:", f1_score(y_test, rf_preds))
-print("\nClassification Report:\n", classification_report(y_test, rf_preds))
-
-# ============================================
-# Save predictions for dashboard
-# ============================================
-
-pred_df = pd.DataFrame({
-    "Actual": y_test,
-    "Logistic_Pred": log_preds,
-    "RF_Pred": rf_preds
-})
+# 3. Save predictions for Power BI
+pred_df = X_test.copy()
+pred_df["ActualChurn"] = y_test.values
+pred_df["PredictedChurn"] = y_pred
+pred_df["ChurnProbability"] = y_prob
 
 pred_df.to_csv("data/processed/model_predictions.csv", index=False)
-
-print("\nModel predictions saved to data/processed/model_predictions.csv")
-
+print("Model predictions saved to data/processed/model_predictions.csv")

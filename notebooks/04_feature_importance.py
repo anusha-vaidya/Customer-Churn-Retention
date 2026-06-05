@@ -4,44 +4,21 @@
 # ============================================
 
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.ensemble import RandomForestClassifier
+from src.model_training import train_logistic_model
 
-# 1. Load processed data
+# 1. Load training data
 X_train = pd.read_csv("data/processed/X_train.csv")
-y_train = pd.read_csv("data/processed/y_train.csv").values.ravel()
+y_train = pd.read_csv("data/processed/y_train.csv").squeeze()
 
-# 2. Train Random Forest (same config as before)
-rf_model = RandomForestClassifier(
-    n_estimators=300,
-    max_depth=10,
-    random_state=42
-)
-
-rf_model.fit(X_train, y_train)
+# 2. Train model (again) to extract coefficients
+model, _, _ = train_logistic_model(X_train, y_train, X_train)
 
 # 3. Extract feature importance
-importance = rf_model.feature_importances_
-feature_names = X_train.columns
-
-feat_imp = pd.DataFrame({
-    "Feature": feature_names,
-    "Importance": importance
+importance_df = pd.DataFrame({
+    "Feature": X_train.columns,
+    "Importance": model.coef_[0]
 }).sort_values(by="Importance", ascending=False)
 
-print("\nTop Features Driving Churn:")
-print(feat_imp.head(10))
-
-# 4. Plot feature importance
-plt.figure(figsize=(10,6))
-sns.barplot(data=feat_imp.head(10), x="Importance", y="Feature", palette="viridis")
-plt.title("Top 10 Features Driving Customer Churn")
-plt.tight_layout()
-plt.show()
-
-# 5. Save feature importance for dashboard
-feat_imp.to_csv("data/processed/feature_importance.csv", index=False)
-
-print("\nFeature importance saved to data/processed/feature_importance.csv")
+# 4. Save to CSV
+importance_df.to_csv("data/processed/feature_importance.csv", index=False)
+print("Feature importance saved to data/processed/feature_importance.csv")
