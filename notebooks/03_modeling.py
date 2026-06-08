@@ -15,8 +15,16 @@ y_test = pd.read_csv("data/processed/y_test.csv").squeeze()
 # 2. Train model + get predictions
 model, y_pred, y_prob = train_logistic_model(X_train, y_train, X_test)
 
-# 3. Save predictions for Power BI
+# 3. Load cleaned dataset to retrieve customerID for the test rows
+clean_df = pd.read_csv("data/processed/cleaned_churn.csv")
+
+# IMPORTANT:
+# X_test.index corresponds to the same row positions in cleaned_churn.csv
+customer_ids = clean_df.loc[X_test.index, "customerID"].values
+
+# 4. Save predictions for Power BI
 pred_df = X_test.copy()
+pred_df["customerID"] = customer_ids
 pred_df["ActualChurn"] = y_test.values
 pred_df["PredictedChurn"] = y_pred
 pred_df["ChurnProbability"] = y_prob
